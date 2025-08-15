@@ -16,12 +16,7 @@ export default defineConfig({
     }),
     react(),
   ],
-  // This is the correct configuration to avoid the sharp error.
-  image: {
-    service: {
-      entrypoint: 'astro/assets/services/passthrough',
-    },
-  },
+  // No image block, Astro will fall back to its default behavior.
   vite: {
     server: {
       allowedHosts: ['augmentations.arcsolutions.tech'],
