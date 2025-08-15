@@ -16,9 +16,15 @@ export default defineConfig({
     }),
     react(),
   ],
+  // Correct configuration to disable the Sharp image service
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/passthrough',
+    },
+  },
   vite: {
     server: {
-      allowedHosts: ['*'], // This allows all hosts for testing
+      allowedHosts: ['augmentations.arcsolutions.tech'],
     },
     resolve: {
       alias: [
