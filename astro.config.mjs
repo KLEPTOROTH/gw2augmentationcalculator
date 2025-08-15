@@ -16,11 +16,11 @@ export default defineConfig({
     }),
     react(),
   ],
-  // The 'image' block has been removed to avoid build errors.
   vite: {
+    server: {
+      allowedHosts: ['*'], // This allows all hosts for testing
     },
     resolve: {
-      // Use the array format for more explicit path matching
       alias: [
         {
           find: '@discretize',
