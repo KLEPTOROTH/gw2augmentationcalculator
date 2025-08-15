@@ -3,8 +3,8 @@ import svelte from '@astrojs/svelte';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import icon from 'astro-icon';
-import { fileURLToPath } from 'url'; // <-- Add this import
-import path from 'path'; // <-- Add this import
+import { fileURLToPath } from 'url'; 
+import path from 'path';
 
 // https://astro.build/config
 export default defineConfig({
