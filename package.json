@@ -13,6 +13,7 @@
     "@astrojs/react": "^3.0.0",
     "@astrojs/svelte": "^5.0.0",
     "@astrojs/tailwind": "^5.0.0",
+    "@floating-ui/react-dom": "^2.1.5",
     "@iconify-json/mdi": "^1.1.64",
     "astro": "^4.16.16",
     "astro-icon": "^1.1.0",
