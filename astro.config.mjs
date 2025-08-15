@@ -16,7 +16,7 @@ export default defineConfig({
     }),
     react(),
   ],
-  // Correct configuration to disable the Sharp image service
+  // This is the correct configuration to avoid the sharp error.
   image: {
     service: {
       entrypoint: 'astro/assets/services/passthrough',
