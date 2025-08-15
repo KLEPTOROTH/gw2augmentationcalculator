@@ -1,0 +1,130 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  caption?: string;
+  url?: string;
+  sourceId?: string;
+  autoplay?: boolean;
+}
+
+const SOURCE_URL = "https://pub-80c25841bf1e4cbda246ab1b42798500.r2.dev/";
+
+const { caption, url, sourceId, autoplay = false } = Astro.props;
+
+const sources_list = [
+  {
+    src: `${SOURCE_URL}${sourceId}/${sourceId}.av1.mp4`,
+    codec: "av01.0.05M.08",
+  },
+  {
+    src: `${SOURCE_URL}${sourceId}/${sourceId}.vp9.mp4`,
+    codec: "vp09.00.31.08",
+  },
+  {
+    src: `${SOURCE_URL}${sourceId}/${sourceId}.x264.mp4`,
+  },
+];
+if (url) {
+  sources_list.length = 0;
+}
+---
+
+<script>
+  class VideoFigure extends HTMLElement {
+    constructor() {
+      super();
+      this.video.addEventListener("mouseover", () => this.play());
+      this.video.addEventListener("mouseout", () => this.pause());
+
+      this.playButton.addEventListener("click", () => this.play());
+      this.video.addEventListener("click", () => {
+        if (this.video.paused) {
+          this.play();
+        } else {
+          this.pause();
+        }
+      });
+    }
+
+    get video() {
+      return this.querySelector("video");
+    }
+
+    get playButton() {
+      return this.querySelector(".playButton");
+    }
+
+    async play() {
+      try {
+        await this.video.play();
+        // for some reason we need to play it twice for mobile devices
+        await this.video.play();
+
+        if (this.playButton instanceof HTMLElement) {
+          this.playButton.style.display = "none";
+        }
+      } catch (e) {
+        //
+      }
+    }
+
+    pause() {
+      this.video.pause();
+      if (this.playButton instanceof HTMLElement) {
+        this.playButton.style.display = "block";
+      }
+    }
+  }
+
+  customElements.define("video-figure", VideoFigure);
+</script>
+
+<video-figure class="relative table-row-group pb-[56.25%] pt-[25px]">
+  <div
+    class:list={[
+      "playButton",
+      "cursor-pointer",
+      "z-10",
+      "text-blue-500",
+      { hidden: autoplay },
+    ]}
+  >
+    <Icon name="mdi:play-circle-outline" size={64} />
+  </div>
+
+  <video
+    loop
+    preload="auto"
+    autoplay={autoplay}
+    muted
+    class:list={["w-full h-auto rounded", { "mb-4": !caption }]}
+  >
+    {
+      sources_list.map(({ src, codec }) => (
+        <source
+          src={src}
+          type={`video/mp4${codec ? `; codecs=${codec}` : ""}`}
+        />
+      ))
+    }
+    {url && <source src={url} type="video/webm" />}
+    Your browser does not support videos :(
+  </video>
+  {
+    caption && (
+      <figcaption class="text-sm m-0 text-center pt-1 px-2 mb-4">
+        {caption}
+      </figcaption>
+    )
+  }
+</video-figure>
+
+<style>
+  .playButton {
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    position: absolute;
+  }
+</style>

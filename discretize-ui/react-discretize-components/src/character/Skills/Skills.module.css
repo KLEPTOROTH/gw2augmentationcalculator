@@ -1,0 +1,18 @@
+.grid {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+.gridItem {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.gridItemMiddle {
+  padding-right: 4px;
+  padding-left: 4px;
+}
+.borders {
+  border-left: 1px solid var(--rdc-color-border);
+  border-right: 1px solid var(--rdc-color-border);
+}

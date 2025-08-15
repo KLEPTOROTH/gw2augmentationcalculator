@@ -1,0 +1,25 @@
+---
+import sizes from "discretize-ui/react-discretize-components/src/helpers/iconSizes";
+
+interface Props {
+  dataProp?: "data" | "dataItem";
+  data?: {
+    icon?: string;
+    name?: string;
+  };
+  dataItem?: {
+    icon?: string;
+    name?: string;
+  };
+  size?: string;
+}
+const dataProp = Astro.props.dataProp || "data";
+const url = Astro.props[dataProp]?.icon;
+if (!url) return;
+
+const pixelSize = sizes[Astro.props?.size] || 18;
+
+Astro.props[dataProp].icon += `?w=${pixelSize}`;
+---
+
+<slot />

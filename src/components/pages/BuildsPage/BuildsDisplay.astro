@@ -1,0 +1,106 @@
+---
+import type { ProfessionTypes } from "@gw2-ui/data/professions";
+import BuildCard, { type BuildCardProps } from "./BuildCard.astro";
+import SelectProfession from "../../SelectProfession.astro";
+import RatingsSelect from "./RatingsSelect.astro";
+
+interface Props {
+  professionBuilds: {
+    profession: ProfessionTypes;
+    builds: BuildCardProps[];
+  }[];
+}
+
+const { professionBuilds } = Astro.props;
+---
+
+<script>
+  const FILTER_PROFESSION = "profession";
+  const FILTER_RATING = "rating";
+
+  type FilterFunction = (elem: HTMLAnchorElement) => boolean;
+
+  class BuildsDisplayClass extends HTMLElement {
+    currentFilters: Record<string, FilterFunction> = {};
+
+    constructor() {
+      super();
+
+      // event listener for the Profession Select
+      this.addEventListener(
+        "changeOption",
+        (e: CustomEvent<{ option: string }>) => {
+          const selected = e.detail.option;
+
+          // add new filter
+          this.currentFilters[FILTER_PROFESSION] =
+            this.filterProfession(selected);
+
+          this.applyFilters();
+        },
+      );
+
+      this.addEventListener(
+        "changeSelectedRating",
+        (e: CustomEvent<{ rating: string }>) => {
+          const selected = e.detail.rating;
+
+          // add new filter
+          this.currentFilters[FILTER_RATING] = this.filterRating(selected);
+
+          this.applyFilters();
+        },
+      );
+    }
+
+    get allBuilds(): NodeListOf<HTMLAnchorElement> {
+      return this.querySelectorAll<HTMLAnchorElement>("section a");
+    }
+
+    private filterProfession =
+      (profToFilter: string): FilterFunction =>
+      (elem: HTMLAnchorElement): boolean => {
+        if (profToFilter === "all") return true;
+        return elem.dataset.profession === profToFilter;
+      };
+
+    private filterRating =
+      (ratingToFilter: string): FilterFunction =>
+      (elem: HTMLAnchorElement): boolean => {
+        if (ratingToFilter === "current") return true;
+        return elem.dataset.rating === ratingToFilter;
+      };
+
+    private applyFilters(): void {
+      this.allBuilds.forEach((elem: HTMLAnchorElement) => {
+        const show = Object.values(this.currentFilters).every((filter) =>
+          filter(elem),
+        );
+
+        elem.classList.toggle("hidden", !show);
+      });
+    }
+  }
+
+  customElements.define("builds-display", BuildsDisplayClass);
+</script>
+
+<builds-display>
+  <RatingsSelect />
+
+  <div class="flex mt-2">
+    <SelectProfession />
+  </div>
+
+  <section class="w-full flex flex-col mt-4">
+    {
+      professionBuilds.map(({ builds }) => (
+        <>
+          {builds.map((build) => (
+            <BuildCard {...build} />
+          ))}
+        </>
+      ))
+    }
+  </section>
+</builds-display>

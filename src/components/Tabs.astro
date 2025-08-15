@@ -1,0 +1,89 @@
+---
+import type { ProfessionTypes } from "@gw2-ui/data/professions";
+import Profession from "./gw2-ui/Profession.astro";
+
+interface Props {
+  tabs: Array<{
+    title: string;
+    specialization?: ProfessionTypes;
+    id?: string;
+  }>;
+}
+
+const { tabs } = Astro.props;
+
+tabs.forEach((tab, index) => {
+  tabs[index] = {
+    ...tab,
+    id: `page_${(tab.title || tab.specialization)
+      ?.toLowerCase()
+      .replaceAll(" ", "")
+      .replaceAll(/\/|[^a-zA-Z0-9]+/gm, "")}`,
+  };
+});
+---
+
+<script>
+  class TabsComponent extends HTMLElement {
+    constructor() {
+      super();
+      this.allTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          this.allTabs.forEach((tab) => tab.classList.remove("tab-active"));
+          tab.classList.add("tab-active");
+
+          this.allContents.forEach((content) => {
+            content.classList.add("hidden");
+            if (content.id === tab.attributes["data-ui"].value) {
+              content.classList.remove("hidden");
+            }
+          });
+        });
+      });
+    }
+
+    get allTabs() {
+      return this.querySelectorAll(".tab");
+    }
+
+    get allContents() {
+      return this.querySelectorAll(".content");
+    }
+  }
+
+  customElements.define("tabs-component", TabsComponent);
+</script>
+
+<tabs-component>
+  <div class="mb-6">
+    <div
+      class="tabs tabs-boxed w-fit ml-8 relative mb-[-2rem] border-2 dark:border-none border-gray-200"
+    >
+      {
+        tabs.map((tab, index) => (
+          <div
+            data-ui={tab.id}
+            class={(index === 0 ? "tab-active" : "") + ` tab !h-12`}
+          >
+            {tab.title ? (
+              tab.title
+            ) : (
+              <div class="flex flex-col">
+                <Profession
+                  name={tab.specialization}
+                  disableLink
+                  disableText
+                  size="medium"
+                />
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="embossed p-4 pt-12 rounded shadow-lg">
+      <slot />
+    </div>
+  </div>
+</tabs-component>

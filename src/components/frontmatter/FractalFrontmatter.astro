@@ -1,0 +1,147 @@
+---
+import { Item } from "@gw2-ui/components";
+import Grid from "../Grid.astro";
+import GridItem from "../GridItem.astro";
+import type { Heading } from "../TableOfContents.astro";
+import TextDivider from "../TextDivider.astro";
+import Attribute from "../gw2-ui/Attribute.astro";
+import Table from "../html-components/table.astro";
+import Map from "../map/Map.astro";
+import Header from "./Header.astro";
+import SectionsToggle from "@components/sections/SectionsToggle.astro";
+
+export interface Props {
+  title: string;
+  cycle: string;
+  sigils: { id: number }[];
+  potions: { id: number }[];
+  description: string;
+  date: string;
+  difficulties: { level: number; ar: number }[];
+  image: string;
+  long_description: string;
+  headings: Heading[];
+}
+
+const {
+  title,
+  cycle,
+  sigils,
+  potions,
+  description,
+  date,
+  difficulties,
+  long_description,
+  headings,
+} = Astro.props;
+
+const imageData = {
+  type: "fractals",
+  slug: Astro.url.pathname.replace("fractals/", "").replaceAll("/", ""),
+  file: "header",
+};
+
+const hasChallengeMode = difficulties.some((d) => d.level >= 97);
+---
+
+<Header title={title} description={description} date={date} image={imageData} />
+
+{
+  hasChallengeMode && (
+    <SectionsToggle
+      labels={["Normal Mode", "Challenge Mode"]}
+      dataTags={["normalmode", "challengemode"]}
+      tooltipTexts={["Show only normal mode", "Show only challenge mode"]}
+      class="mb-4"
+    />
+  )
+}
+
+{
+  long_description && (
+    <summary class="mb-4 list-none">{long_description}</summary>
+  )
+}
+
+<TextDivider text="Details" />
+
+<section class="mb-4">
+  <Grid>
+    <GridItem>
+      <Table>
+        <tbody>
+          <tr>
+            <th>Difficulties</th>
+            <td>
+              {
+                difficulties.map((d) => (
+                  <>
+                    Level {d.level}
+                    {d.ar > 0 && (
+                      <>
+                        -{" "}
+                        <Attribute
+                          name="Agony Resistance"
+                          text={d.ar + " Agony Resistance"}
+                        />
+                      </>
+                    )}
+                    <br />
+                  </>
+                ))
+              }
+            </td>
+          </tr>
+          <tr>
+            <th>Cycle</th>
+            <td>{cycle}</td>
+          </tr>
+
+          {
+            potions ? (
+              <tr>
+                <th>Potions</th>
+                <td>
+                  <ul>
+                    {potions.map((p) => (
+                      <li>
+                        <Item client:visible id={p.id} />
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+              </tr>
+            ) : null
+          }
+
+          {
+            sigils ? (
+              <tr>
+                <th>Sigils</th>
+                <td>
+                  <ul>
+                    {sigils.map((s) => (
+                      <li>
+                        <Item client:visible id={s.id} />
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+              </tr>
+            ) : null
+          }
+        </tbody>
+      </Table>
+    </GridItem>
+    <GridItem>
+      <div class="md:flex md:flex-row-reverse">
+        <Map
+          type={title.toLowerCase().replaceAll(" ", "-")}
+          headings={headings}
+        />
+      </div>
+    </GridItem>
+  </Grid>
+</section>
+
+<TextDivider text="Guide" />

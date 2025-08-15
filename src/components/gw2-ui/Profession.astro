@@ -1,0 +1,17 @@
+---
+import UIProfession, {
+  type ProfessionProps,
+} from "@gw2-ui/components/Profession/Profession";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+
+type Props = ProfessionProps & GenericWebsiteComponent;
+
+const professionProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${Astro.props.className || ""}`.trim(),
+  style: getSizeStyle(Astro.props),
+};
+---
+
+<UIProfession client:visible {...professionProps} />

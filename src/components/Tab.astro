@@ -1,0 +1,14 @@
+---
+const { title, isFirst, specialization } = Astro.props;
+---
+
+<div
+  class:list={["content", "padding", { hidden: !isFirst }]}
+  id={`page_${(title || specialization)
+    ?.toLowerCase()
+    .replaceAll(/\/|[^a-zA-Z0-9]+/gm, "")}`}
+>
+  <div class="page-content [&>p]:!mb-0">
+    <slot />
+  </div>
+</div>

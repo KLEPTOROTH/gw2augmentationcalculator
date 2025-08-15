@@ -1,5 +1,30 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@md-guides/*": ["discretize-guides/*"],
+      "@gw2-ui/*": ["discretize-ui/gw2-ui/src/*"],
+      "@discretize/gw2-ui-new": ["discretize-ui/gw2-ui/src/index"],
+      "@discretize/react-discretize-components": [
+        "discretize-ui/react-discretize-components/src/index"
+      ],
+      "@components/*": ["src/components/*"],
+      "@gw2api/*": ["gw2-api-extended/data/api-extended/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "gw2-api-extended",
+    "**/discretize-gear-optimizer/*",
+    "discretize-ui",
+    ".cache",
+    ".git",
+    "dist",
+    "**/node_modules/*"
+  ]
 }

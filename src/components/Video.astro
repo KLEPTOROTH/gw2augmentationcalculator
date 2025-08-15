@@ -1,0 +1,20 @@
+---
+import { YouTube } from "@astro-community/astro-embed-youtube";
+
+interface Props {
+  youtube: string;
+  caption?: string;
+  timestamp?: number;
+}
+
+const { youtube, caption, timestamp } = Astro.props;
+
+let params = "&modestbranding=1&rel=0";
+
+if (timestamp) {
+  params += `&start=${timestamp}`;
+}
+---
+
+<YouTube id={youtube} playlabel="test" class="youtube" params={params} />
+{caption && <sub>{caption}</sub>}

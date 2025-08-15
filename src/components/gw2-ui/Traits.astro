@@ -1,0 +1,134 @@
+---
+import TraitLineInternal from "@gw2-ui/components/TraitLine/TraitLineInternal";
+import type GW2ApiSpecialization from "@gw2-ui/gw2api/types/specialization/specialization";
+import type GW2ApiTrait from "@gw2-ui/gw2api/types/traits/trait";
+
+interface TraitsData {
+  dataSpecialization: GW2ApiSpecialization;
+  dataTraits: Record<number, GW2ApiTrait>;
+}
+
+interface Props {
+  traits1Id?: number;
+  traits1data?: TraitsData;
+  traits1?: string;
+  traits1SelectedIds?: string;
+  traits2Id?: number;
+  traits2data?: TraitsData;
+  traits2?: string;
+  traits2SelectedIds?: string;
+  traits3Id?: number;
+  traits3data?: TraitsData;
+  traits3?: string;
+  traits3SelectedIds?: string;
+}
+
+const {
+  traits1Id,
+  traits1data: {
+    dataSpecialization: traits1dataSpecialization,
+    dataTraits: traits1dataTraits,
+  } = {},
+  traits1,
+  traits1SelectedIds,
+  traits2Id,
+  traits2data: {
+    dataSpecialization: traits2dataSpecialization,
+    dataTraits: traits2dataTraits,
+  } = {},
+  traits2,
+  traits2SelectedIds,
+  traits3Id,
+  traits3data: {
+    dataSpecialization: traits3dataSpecialization,
+    dataTraits: traits3dataTraits,
+  } = {},
+  traits3,
+  traits3SelectedIds,
+} = Astro.props;
+
+const traits1Selected = traits1SelectedIds
+  ?.split(",")
+  .map((id) => parseInt(id, 10));
+
+const traits2Selected = traits2SelectedIds
+  ?.split(",")
+  .map((id) => parseInt(id, 10));
+
+const traits3Selected = traits3SelectedIds
+  ?.split(",")
+  .map((id) => parseInt(id, 10));
+
+function transformTraitsData(
+  data: Record<number, GW2ApiTrait>
+): Record<number, GW2ApiTrait> {
+  const transformedTraits = Object.entries(data).map(([key, value]) => {
+    return [key, { ...value, icon: value.icon + `?w=37` }];
+  });
+
+  return Object.fromEntries(transformedTraits);
+}
+
+function transformSpecializationData(
+  data: GW2ApiSpecialization
+): GW2ApiSpecialization {
+  if (!data.background) return data;
+  data.background += `?w=1024&h=256`;
+  return data;
+}
+
+const dataTraits1 = traits1dataTraits
+  ? transformTraitsData(traits1dataTraits)
+  : {};
+const dataTraits2 = traits2dataTraits
+  ? transformTraitsData(traits2dataTraits)
+  : {};
+const dataTraits3 = traits3dataTraits
+  ? transformTraitsData(traits3dataTraits)
+  : {};
+
+const dataSpecialization1 = traits1dataSpecialization
+  ? transformSpecializationData(traits1dataSpecialization)
+  : undefined;
+const dataSpecialization2 = traits2dataSpecialization
+  ? transformSpecializationData(traits2dataSpecialization)
+  : undefined;
+const dataSpecialization3 = traits3dataSpecialization
+  ? transformSpecializationData(traits3dataSpecialization)
+  : undefined;
+---
+
+{traits1}
+{
+  traits1Id && (
+    <TraitLineInternal
+      client:visible
+      dataSpecialization={dataSpecialization1}
+      dataTraits={dataTraits1}
+      defaultSelected={traits1Selected}
+    />
+  )
+}
+{traits2}
+{
+  traits2Id && (
+    <TraitLineInternal
+      client:visible
+      dataSpecialization={dataSpecialization2}
+      dataTraits={dataTraits2}
+      defaultSelected={traits2Selected}
+    />
+  )
+}
+{traits3}
+{
+  traits3Id && (
+    <TraitLineInternal
+      client:visible
+      dataSpecialization={dataSpecialization3}
+      dataTraits={dataTraits3}
+      defaultSelected={traits3Selected}
+    />
+  )
+}
+<div class="mb-4"></div>

@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.divider {
+  height: 1px;
+  background-color: var(--rdc-color-border);
+  flex-grow: 1;
+}
+.content {
+  font-family: Raleway;
+  margin-left: 16px;
+  margin-right: 16px;
+  font-weight: 400;
+  color: inherit;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1.35417em;
+}

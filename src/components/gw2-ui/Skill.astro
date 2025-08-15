@@ -1,0 +1,22 @@
+---
+import SkillInternal, {
+  type SkillInternalProps,
+} from "@gw2-ui/components/Skill/SkillInternal";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+import OptimizedGW2Image from "./OptimizedGW2Image.astro";
+
+type Props = SkillInternalProps & GenericWebsiteComponent;
+
+const { data, size, className } = Astro.props;
+
+const skillProps: SkillInternalProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${className || ""}`.trim(),
+  style: getSizeStyle({ size }),
+};
+---
+
+<OptimizedGW2Image data={data} size={size}>
+  <SkillInternal client:visible {...skillProps} />
+</OptimizedGW2Image>

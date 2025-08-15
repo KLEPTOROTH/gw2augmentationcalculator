@@ -1,0 +1,19 @@
+---
+import UICondition, {
+  type ConditionProps,
+} from "@gw2-ui/components/Condition/Condition";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+
+type Props = ConditionProps & GenericWebsiteComponent;
+
+const { className, size } = Astro.props;
+
+const conditionProps: ConditionProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${className || ""}`.trim(),
+  style: getSizeStyle({ size }),
+};
+---
+
+<UICondition client:visible {...conditionProps} />

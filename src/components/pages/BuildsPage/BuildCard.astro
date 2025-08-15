@@ -1,0 +1,162 @@
+---
+import { Icon } from "astro-icon/components";
+import Tooltip2 from "../../Tooltip2.astro";
+import Profession from "../../gw2-ui/Profession.astro";
+import { getOptimizedImage } from "../../images";
+
+export interface BuildCardProps {
+  title: string;
+  role: string;
+  date: string;
+  profession: string;
+  specialization: string;
+  cmGuide: boolean;
+  uptodate: boolean;
+  rating: number;
+  slug: string;
+  archive: boolean;
+}
+
+const {
+  title,
+  specialization,
+  profession,
+  slug,
+  cmGuide,
+  role,
+  rating,
+  uptodate = { guide: true, gear: true },
+} = Astro.props;
+
+const professionColorMain = `var(--gw2-color-${profession.toLowerCase()}-main)`;
+const professionColorLight = `var(--gw2-color-${profession.toLowerCase()}-light)`;
+
+const image = await getOptimizedImage(specialization.toLowerCase(), {
+  height: 1000,
+  width: 1000,
+  alt: "",
+  format: "webp",
+});
+---
+
+<a
+  href={`/builds/${slug}`}
+  class={`mb-4 block ${rating === "archive" ? "hidden" : ""}`}
+  data-rating={rating.toLowerCase().replace(" ", "")}
+  data-profession={profession}
+>
+  <article
+    class={`outer h-20 py-0 px-8 w-full grid rounded-xl items-center border-[1px] border-solid grid-flow-col-dense bg-cover bg-center`}
+    style={{
+      backgroundImage: `linear-gradient(0.25turn, rgb(38,41,46), rgba(38,41,46, .97), rgba(0,0,0,0.4)), url(${image.src})`,
+    }}
+  >
+    <div class="text-2xl">
+      <Profession
+        name={specialization}
+        disableLink
+        className="spec"
+        text={title}
+      />
+      <!-- {
+        // if this build was updated in the last 7 days, show a new tag
+        new Date(date).getTime() >
+        new Date().getTime() - UPDATED_LAST_X_DAYS * 24 * 60 * 60 * 1000 ? (
+          <span class="badge">Updated</span>
+        ) : undefined
+      } -->
+    </div>
+
+    <!-- <div class="overflow-hidden">
+      <img
+        src={image.src}
+        width={200}
+        height={200}
+        alt={specialization}
+        class="image hidden sm:block -my-[3.85rem] brightness-50"
+      />
+    </div> -->
+
+    <div class="flex gap-2 self-center max-sm:hidden">
+      <div class="text-xs">
+        <Tooltip2>
+          <span slot="target">
+            <Icon
+              name="mdi:clock-outline"
+              height={28}
+              class={`${
+                uptodate.guide && uptodate.gear
+                  ? "text-green-500"
+                  : uptodate.guide || uptodate.gear
+                    ? "yellow"
+                    : "red"
+              }`}
+            />
+          </span>
+          <div slot="tooltip">
+            Gear: {uptodate.gear ? "up-to-date" : "not updated"}<br />
+            Guide: {uptodate.guide ? "up-to-date" : "not updated"}
+          </div>
+        </Tooltip2>
+      </div>
+
+      {
+        cmGuide && (
+          <>
+            <Tooltip2>
+              <div class="text-blue-600" slot="target">
+                <Icon name="mdi:book-open" height={28} />
+              </div>
+              <span slot="tooltip">CM-Guide available</span>
+            </Tooltip2>
+          </>
+        )
+      }
+
+      <div class="justify-end flex max-lg:hidden gap-2">
+        {
+          [rating, role].map((tag) => {
+            return (
+              <div
+                class={`text-xs border rounded-lg tertiary-border on-surface small cursor-default px-2 py-1 border-${profession.toLowerCase()}-main`}
+              >
+                <span>{tag}</span>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </article>
+</a>
+
+<style
+  define:vars={{
+    professionColorLight,
+    professionColorMain,
+    imgsrc: `url(${image.src})`,
+  }}
+>
+  .outer {
+    border-color: var(--professionColorMain);
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 425px) {
+    .outer {
+      grid-template-columns: 1fr;
+    }
+  }
+  .outer:hover {
+    border-color: var(--professionColorLight);
+    background-image: linear-gradient(
+        0.25turn,
+        rgba(38, 41, 46, 0.95),
+        rgba(0, 0, 0, 0.2)
+      ),
+      var(--imgsrc) !important;
+  }
+  .outer:hover img {
+    filter: brightness(100%);
+  }
+</style>

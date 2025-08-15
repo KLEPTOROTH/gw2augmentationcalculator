@@ -1,0 +1,61 @@
+---
+import { getImage } from "astro:assets";
+import "@discretize/typeface-menomonia";
+import "@gw2-ui/default_style.css";
+import type { Props as FractalProps } from "src/components/frontmatter/FractalFrontmatter.astro";
+import FractalFrontmatter from "src/components/frontmatter/FractalFrontmatter.astro";
+import { fractalHeaders } from "src/utils/cache";
+import imageFetch from "src/utils/imageFetch";
+import Layout, { type SEOProps } from "./Layout.astro";
+
+export interface Props {
+  frontmatter: FractalProps;
+  headings: {
+    depth: number;
+    slug: string;
+    image: string;
+    text: string;
+  }[];
+  url: string;
+}
+const { title } = Astro.props.frontmatter;
+
+const headerImage = imageFetch(Object.keys(fractalHeaders), Astro.url.pathname);
+
+let seo: SEOProps = { title };
+
+const generateDefaultDescription = (title: string) =>
+  `Master the ${title} fractal in Guild Wars 2 with our in-depth guide.`;
+
+if (headerImage) {
+  const thumbnail = (await Object.entries(fractalHeaders).find(
+    ([k]) => k === headerImage,
+  )[1]()) as ImageMetadata;
+
+  const ogImage = await getImage({
+    src: thumbnail,
+    height: 512,
+    width: 512,
+    format: "png",
+    alt: "OG Image",
+  });
+
+  seo = {
+    title,
+    description:
+      Astro.props.frontmatter.long_description ||
+      generateDefaultDescription(title),
+    image: ogImage?.src,
+  };
+}
+---
+
+<Layout seo={seo}>
+  <FractalFrontmatter
+    {...Astro.props.frontmatter}
+    headings={Astro.props.headings}
+  />
+  <article>
+    <slot />
+  </article>
+</Layout>

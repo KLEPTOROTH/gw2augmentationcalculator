@@ -1,0 +1,19 @@
+---
+import UIAugmentation, {
+  type AugmentationProps,
+} from "@gw2-ui/components/Augmentation/Augmentation";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+
+type Props = AugmentationProps & GenericWebsiteComponent;
+
+const { className, size } = Astro.props;
+
+const augmentationProps: AugmentationProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${className || ""}`.trim(),
+  style: getSizeStyle({ size }),
+};
+---
+
+<UIAugmentation client:visible {...augmentationProps} />

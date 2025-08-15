@@ -1,0 +1,17 @@
+---
+import UIBoon, { type BoonProps } from "@gw2-ui/components/Boon/Boon";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+
+type Props = BoonProps & GenericWebsiteComponent;
+
+const { className, size } = Astro.props;
+
+const boonProps: BoonProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${className || ""}`.trim(),
+  style: getSizeStyle({ size }),
+};
+---
+
+<UIBoon client:visible {...boonProps} />

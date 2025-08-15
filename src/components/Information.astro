@@ -1,0 +1,25 @@
+---
+import { Icon } from "astro-icon/components";
+import Card from "./Card.astro";
+
+interface Props {
+  icon?: string;
+}
+
+const { icon = "mdi:information" } = Astro.props;
+---
+
+<Card>
+  <div class="flex max-md:flex-col gap-4 items-center">
+    <Icon name={icon} height={48} width={48} class="flex-none" />
+    <div class="content">
+      <slot />
+    </div>
+  </div>
+</Card>
+
+<style>
+  .content :global(p:last-of-type) {
+    margin-bottom: 0;
+  }
+</style>

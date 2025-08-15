@@ -1,0 +1,17 @@
+---
+import UIMistlockInstability, {
+  type MistlockInstabilityProps,
+} from "@gw2-ui/components/MistlockInstability/MistlockInstability";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+
+type Props = MistlockInstabilityProps & GenericWebsiteComponent;
+
+const mistlockInstabilityProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${Astro.props.className || ""}`.trim(),
+  style: getSizeStyle(Astro.props),
+};
+---
+
+<UIMistlockInstability client:visible {...mistlockInstabilityProps} />

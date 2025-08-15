@@ -1,0 +1,75 @@
+---
+import PROFESSIONS, { type ProfessionTypes } from "@gw2-ui/data/professions";
+import Select from "./Select.astro";
+import Profession from "./gw2-ui/Profession.astro";
+---
+
+<script>
+  class SelectProfessionClass extends HTMLElement {
+    selected: string | null = null;
+    changeOptionEvent: CustomEvent<{ option: string | null }>;
+
+    constructor() {
+      super();
+
+      this.options.forEach((option) => {
+        option.addEventListener("click", () => {
+          const optionValue = option.getAttribute("data-option");
+          if (optionValue) {
+            this.setSelected(optionValue);
+          }
+        });
+      });
+
+      this.changeOptionEvent = new CustomEvent("changeOption", {
+        detail: {
+          option: this.selected,
+        },
+        bubbles: true,
+        cancelable: false,
+      });
+    }
+
+    get options(): NodeListOf<HTMLAnchorElement> {
+      return this.querySelectorAll("a");
+    }
+
+    get label(): HTMLSpanElement | null {
+      return this.querySelector("label span");
+    }
+
+    setSelected(target: string): void {
+      // set focus false to close the dropdown
+      (document.activeElement as HTMLElement)?.blur();
+
+      this.selected = target;
+      if (this.label) {
+        this.label.textContent = target;
+      }
+      this.changeOptionEvent.detail.option = target;
+      this.dispatchEvent(this.changeOptionEvent);
+    }
+  }
+
+  customElements.define("select-profession", SelectProfessionClass);
+</script>
+
+<select-profession>
+  <Select class="w-56">
+    <span slot="label" class="font-normal">Select Profession</span>
+    <Fragment slot="dropdown">
+      <li>
+        <a data-option="all">All</a>
+      </li>
+      {
+        Object.keys(PROFESSIONS).map((profession) => (
+          <li>
+            <a data-option={profession}>
+              <Profession name={profession as ProfessionTypes} disableLink />
+            </a>
+          </li>
+        ))
+      }
+    </Fragment>
+  </Select>
+</select-profession>

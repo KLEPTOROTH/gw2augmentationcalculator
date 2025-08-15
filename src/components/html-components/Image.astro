@@ -1,0 +1,62 @@
+---
+import type { ImageOutputFormat } from "astro";
+import { Picture } from "astro:assets";
+
+const { src, caption, ...attrs } = Astro.props;
+
+const formats: ImageOutputFormat[] = ["avif", "webp", "jpeg"];
+---
+
+<script>
+  let isEnhanced = false;
+
+  // attach on click listener to image
+
+  for (const img of document.querySelectorAll("img")) {
+    if (!Object.keys(img.dataset).includes("maximizable")) continue;
+    img.addEventListener("click", () => {
+      if (isEnhanced) {
+        img.classList.remove("maximized");
+        document.body.style.overflow = "auto";
+      } else {
+        img.classList.add("maximized");
+        document.body.style.overflow = "hidden";
+      }
+      isEnhanced = !isEnhanced;
+    });
+  }
+</script>
+
+<figure class="mb-4">
+  <div class="relative block ml-auto mr-auto max-w-2xl">
+    <Picture
+      src={src}
+      widths={[400, 800, 1200]}
+      {...attrs}
+      alt={caption || "Image"}
+      formats={formats}
+      loading={"lazy"}
+      data-maximizable
+      sizes="(max-width: 400px) 10vw, (max-width: 800px) 50vw, 100vw"
+      class="cursor-zoom-in rounded w-full"
+    />
+  </div>
+  <figcaption class="text-sm m-0 text-center pt-1 px-2">{caption}</figcaption>
+</figure>
+
+<style>
+  .maximized {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    object-fit: contain;
+    object-position: center;
+    z-index: 1000;
+    cursor: zoom-out;
+
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+</style>

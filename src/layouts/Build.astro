@@ -1,0 +1,40 @@
+---
+import { getImage } from "astro:assets";
+import "@discretize/typeface-menomonia";
+import "@gw2-ui/default_style.css";
+import type { Props as BuildProps } from "../components/frontmatter/BuildFrontmatter.astro";
+import BuildFrontmatter from "../components/frontmatter/BuildFrontmatter.astro";
+import images from "../components/images";
+import Layout, { type SEOProps } from "./Layout.astro";
+
+export { components } from "../components/components";
+
+export interface Props {
+  frontmatter: BuildProps;
+}
+
+const { title, specialization, profession, role, rating } =
+  Astro.props.frontmatter;
+
+const ogImage = await getImage({
+  src: images[specialization?.toLowerCase()],
+  width: 512,
+  height: 512,
+  format: "png",
+  alt: "OG Image",
+});
+
+const seo: SEOProps = {
+  title,
+  image: ogImage?.src,
+  description: `The ${title} is a ${role} build for ${profession} in fractals. It is considered a ${rating} build.`,
+};
+---
+
+<Layout seo={seo}>
+  <BuildFrontmatter {...Astro.props.frontmatter} />
+
+  <article>
+    <slot />
+  </article>
+</Layout>

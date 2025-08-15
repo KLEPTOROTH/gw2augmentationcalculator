@@ -1,0 +1,49 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  href: string;
+  label?: string;
+  className?: string;
+  disablePrefetch?: boolean;
+  enableDecoration?: boolean;
+}
+
+const {
+  href,
+  label,
+  className,
+  disablePrefetch = true,
+  enableDecoration = false,
+} = Astro.props;
+
+const isInternal = !href.startsWith("http");
+
+const linkProps = {
+  href,
+  target: isInternal ? undefined : "_blank",
+  rel: "noopener noreferrer nofollow",
+  "data-astro-prefetch": isInternal ? "viewport" : "none",
+};
+
+if (disablePrefetch && isInternal) {
+  delete linkProps["data-astro-prefetch"];
+}
+---
+
+<a
+  {...linkProps}
+  aria-label={label}
+  class:list={[
+    "whitespace-nowrap",
+    className,
+    { "text-blue-500": enableDecoration, "hover:underline": enableDecoration },
+  ]}
+>
+  <slot />
+  {
+    enableDecoration && !isInternal ? (
+      <Icon name="mdi:link-variant" class="inline-flex" size={12.8} />
+    ) : undefined
+  }
+</a>

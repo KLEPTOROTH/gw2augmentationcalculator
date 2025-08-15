@@ -1,0 +1,43 @@
+---
+import TextDivider from "../TextDivider.astro";
+import Label from "../Label.astro";
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  title: string;
+  author?: string;
+  date: string;
+  priority?: number;
+  description?: string;
+}
+
+const { title, author, date } = Astro.props;
+---
+
+<header class="flex items-center mb-2">
+  <div class="flex flex-grow">
+    <div class="self-center">
+      <h1>{title}</h1>
+    </div>
+  </div>
+  <Label className="!p-2">
+    <ul class="m-0 pl-0">
+      <li class="flex">
+        <Icon name="mdi:calendar-range" height={12.8} class="mr-2" />
+        {new Date(date).toLocaleDateString()}
+      </li>
+      {
+        author && (
+          <li class="flex mt-2">
+            <>
+              <Icon name="mdi:human" height={12.8} class="mr-2" />
+              <span>{author}</span>
+            </>
+          </li>
+        )
+      }
+    </ul>
+  </Label>
+</header>
+
+<TextDivider text="Guide" />

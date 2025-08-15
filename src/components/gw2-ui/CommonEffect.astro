@@ -1,0 +1,19 @@
+---
+import UICommonEffect, {
+  type CommonEffectProps,
+} from "@gw2-ui/components/CommonEffect/CommonEffect";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+
+type Props = CommonEffectProps & GenericWebsiteComponent;
+
+const { size, className } = Astro.props;
+
+const commonEffectProps: CommonEffectProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${className || ""}`.trim(),
+  style: getSizeStyle({ size }),
+};
+---
+
+<UICommonEffect client:visible {...commonEffectProps} />

@@ -1,0 +1,22 @@
+---
+import ItemInternal, {
+  type ItemInternalProps,
+} from "@gw2-ui/components/Item/ItemInternal";
+import { getSizeStyle } from "src/utils/styles";
+import type { GenericWebsiteComponent } from "src/utils/types";
+import OptimizedGW2Image from "./OptimizedGW2Image.astro";
+
+type Props = ItemInternalProps & GenericWebsiteComponent;
+
+const { dataItem, size, className } = Astro.props;
+
+const itemProps: ItemInternalProps = {
+  ...Astro.props,
+  className: `whitespace-nowrap ${className || ""}`.trim(),
+  style: getSizeStyle({ size }),
+};
+---
+
+<OptimizedGW2Image dataProp="dataItem" dataItem={dataItem} size={size}>
+  <ItemInternal client:visible {...itemProps} />
+</OptimizedGW2Image>

@@ -1,0 +1,74 @@
+---
+// copied from here and slightly adjusted https://github.com/theisel/astro-toc/blob/main/packages/astro-toc/lib/TOC.astro
+
+interface Heading {
+  title: string;
+  url?: string;
+  depth: number;
+  [key: string]: any;
+}
+
+type TocStyle = "bullet" | "number" | "menu";
+
+interface BaseProps {
+  toc: Heading[];
+  as?: TocStyle;
+  maxDepth?: number | string;
+  class?: string;
+}
+
+interface ClassicProps extends BaseProps {
+  use?: never;
+}
+
+interface ComponentProps extends BaseProps {
+  use: (props: Heading) => any; // Could be made more specific based on your needs
+}
+
+type Props = ClassicProps | ComponentProps;
+
+const { toc, depth = 1, ...props } = Astro.props as Props & { depth?: number };
+const { use: Cmp, class: className } = props;
+const as = props.as ?? "bullet";
+const maxDepth = Number(props.maxDepth);
+const hasMaxDepth = Number.isInteger(maxDepth);
+const headings = toc.filter((it) => it.depth === depth);
+
+type TagType = "menu" | "ol" | "ul";
+const Tag: TagType = (
+  Cmp ?? "menu" === as ? "menu" : "number" === as ? "ol" : "ul"
+) as TagType;
+---
+
+<Tag data-astro-toc={depth}>
+  {
+    headings.map((it, idx) => {
+      const nextHeading = headings[idx + 1];
+      const subHeadings = toc.slice(
+        toc.indexOf(it) + 1,
+        nextHeading ? toc.indexOf(nextHeading) : undefined,
+      );
+      const hasSubHeadings = subHeadings.length > 0;
+      const shouldRenderSubHeadings = hasMaxDepth
+        ? maxDepth > it.depth
+        : hasSubHeadings;
+
+      return (
+        <li data-astro-toc={depth}>
+          <div>
+            {Cmp ? (
+              <Cmp {...it} class={className} />
+            ) : it.url ? (
+              <a href={it.url}>{it.title}</a>
+            ) : (
+              it.title
+            )}
+            {shouldRenderSubHeadings ? (
+              <Astro.self toc={subHeadings} depth={it.depth + 1} {...props} />
+            ) : null}
+          </div>
+        </li>
+      );
+    })
+  }
+</Tag>

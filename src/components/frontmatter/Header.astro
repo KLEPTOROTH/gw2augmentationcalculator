@@ -1,0 +1,61 @@
+---
+import { Picture } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  title: string;
+  description: string;
+  image: {
+    type: string;
+    slug: string;
+    file: string;
+  };
+  date: string;
+}
+
+const { title, description, image, date } = Astro.props;
+---
+
+<header id="mobileHeader" class="sm:hidden mb-4">
+  <h1>{title}</h1>
+
+  <Picture
+    src={import(
+      `../../../discretize-guides/${image.type}/${image.slug}/images/${image.file}.jpg`
+    )}
+    alt="Header"
+    width={1280}
+    height={500}
+    sizes="100vw"
+  />
+</header>
+
+<header
+  id="desktopHeader"
+  class="relative h-full mx-[-1.4rem] mt-[-1.393rem] mb-4 max-sm:hidden max-[1439px]:mt-[-1rem] max-[1439px]:mx-[-1rem]"
+>
+  <Picture
+    src={import(
+      `../../../discretize-guides/${image.type}/${image.slug}/images/${image.file}.jpg`
+    )}
+    alt="Header"
+    width={1440}
+    height={562.5}
+    class="w-full"
+  />
+
+  <div
+    class="transform translate-y-[-50%] absolute top-1/2 left-0 max-w-full h-[120px] flex justify-between flex-col items-start p-4 bg-blue-500 text-black"
+  >
+    <h1 class="mb-0 font-bold">{title}</h1>
+    <small>{description}</small>
+  </div>
+
+  <div class="absolute top-0 right-0 p-1 text-sm bg-blue-500 text-black">
+    <small class="flex gap-1 items-center">
+      <Icon name="mdi:calendar" height={12.8} /> last updated on {
+        new Date(date).toDateString()
+      }
+    </small>
+  </div>
+</header>

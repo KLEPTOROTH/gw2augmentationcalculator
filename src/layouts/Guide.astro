@@ -1,0 +1,50 @@
+---
+import { getImage } from "astro:assets";
+import "@discretize/typeface-menomonia";
+import "@gw2-ui/default_style.css";
+import type { Props as GuideProps } from "src/components/frontmatter/GuideFrontmatter.astro";
+import GuideFrontmatter from "src/components/frontmatter/GuideFrontmatter.astro";
+import { guideHeaders } from "src/utils/cache";
+import imageFetch from "src/utils/imageFetch";
+import Layout, { type SEOProps } from "./Layout.astro";
+
+export interface Props {
+  frontmatter: GuideProps;
+}
+
+const { title, description } = Astro.props.frontmatter;
+
+const headerImage = imageFetch(Object.keys(guideHeaders), Astro.url.pathname);
+
+let seo: SEOProps = { title };
+
+const createDefaultDescription = (title: string) =>
+  `Learn everything about ${title} in Guild Wars 2. Our general guides are designed to improve your knowledge of game basics.`;
+
+if (headerImage) {
+  const thumbnail = (await Object.entries(guideHeaders).find(
+    ([k]) => k === headerImage,
+  )[1]()) as ImageMetadata;
+
+  const ogImage = await getImage({
+    src: thumbnail,
+    width: 512,
+    height: 512,
+    format: "png",
+    alt: "OG Image",
+  });
+
+  seo = {
+    title,
+    image: ogImage?.src,
+    description: description || createDefaultDescription(title),
+  };
+}
+---
+
+<Layout seo={seo}>
+  <GuideFrontmatter {...Astro.props.frontmatter} />
+  <article>
+    <slot />
+  </article>
+</Layout>

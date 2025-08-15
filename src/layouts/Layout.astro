@@ -1,0 +1,224 @@
+---
+import ScrollUpButton from "@components/ScrollUpButton.astro";
+import Footer from "@components/navigation/Footer.astro";
+import { Picture } from "astro:assets";
+import backgroundImage from "src/assets/images/backgrounds/lobby.png";
+import { BACKGROUND, TEXT } from "src/styles";
+import "typeface-muli";
+import "typeface-raleway";
+import TopBar from "../components/navigation/TopBar.astro";
+import "../main.css";
+import "./overrides.css";
+
+export interface SEOProps {
+  title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+}
+export interface Props {
+  seo: SEOProps;
+  disablePadding?: boolean;
+  disableBackground?: boolean;
+  disableBackgroundImage?: boolean;
+}
+
+const titleTemplate = "%s - GW2 | Discretize [dT]";
+
+const {
+  seo: {
+    title:
+      titleRaw = "GW2 | Discretize [dT] - Fractal, Profession and Mechanics Guides",
+    description = "Master Guild Wars 2 fractals with Discretize, a top-tier guild. Discover expert strategies, builds, and mechanics to dominate every challenge in fractals.",
+    image = "/logo.png",
+    url = "https://discretize.eu",
+  } = {},
+  disablePadding = false,
+  disableBackground = false,
+  disableBackgroundImage = false,
+} = Astro.props;
+
+const title = titleRaw.startsWith("GW2 | Discretize [dT]")
+  ? titleRaw
+  : titleTemplate.replace("%s", titleRaw);
+---
+
+<!doctype html>
+<html lang="en" class="dark" data-theme="discretizeDark">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+    />
+
+    <meta name="language" content="english" />
+    <meta http-equiv="content-language" content="en" />
+    <meta name="application-name" content="Discretize" />
+    <meta name="theme-color" content="#2f3136" />
+
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+    <meta name="google" content="notranslate" />
+
+    <meta name="msapplication-TileColor" content="#2f3136" />
+
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Discretize" />
+
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={`/apple-touch-icon.png`}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href={`/favicon-32x32.png`}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href={`/favicon-16x16.png`}
+    />
+    <link rel="manifest" href={`/manifest.json`} />
+    <link rel="mask-icon" href={`/safari-pinned-tab.svg`} color="#00cccc" />
+
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta
+      name="keywords"
+      content="Guild Wars 2, GW2, Discretize, PvE guides, Fractal guides, fractals, mechanics, tutorial, builds, optimal builds, gameplay tips"
+    />
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={url} />
+    <meta item-prop="name" content={title} />
+    <meta item-prop="description" content={description} />
+    <meta item-prop="image" content={image} />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta name="twitter:url" content={url} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Discretize" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script>
+      function reloadTheme() {
+        if (
+          localStorage.theme === "dark" ||
+          (!("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+          document.documentElement.setAttribute("data-theme", "discretizeDark");
+          localStorage.theme = "dark";
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.documentElement.setAttribute("data-theme", "light");
+          localStorage.theme = "light";
+        }
+      }
+      reloadTheme();
+    </script>
+  </head>
+  <body class:list={[TEXT, BACKGROUND]}>
+    <TopBar />
+    <div id="floating-portal"></div>
+
+    <main class:list={[{ mainWrapper: !disablePadding }]}>
+      {
+        !disableBackgroundImage && (
+          <div class="backgroundImage">
+            <Picture
+              src={backgroundImage}
+              alt="Background"
+              formats={["avif", "webp"]}
+              widths={[1600, 2160, 3440]}
+              sizes="(max-width: 1600px) 10vw, (max-width: 2160px) 50vw, 100vw"
+              loading="lazy"
+            />
+          </div>
+        )
+      }
+      <div
+        class:list={[
+          { [BACKGROUND]: !disableBackground, main: !disablePadding },
+        ]}
+      >
+        <slot />
+      </div>
+    </main>
+
+    <ScrollUpButton />
+
+    <Footer disablePadding={disablePadding} />
+  </body>
+
+  <style is:global>
+    .backgroundImage {
+      display: none;
+    }
+
+    @media only screen and (min-width: 1001px) {
+      .backgroundImage {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100%;
+        z-index: -1;
+        display: block;
+      }
+      .backgroundImage img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        opacity: 0.7;
+        filter: brightness(0.9);
+      }
+    }
+    .main {
+      padding: 1.4rem 1.4rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .mainWrapper {
+      margin-top: 2rem;
+      min-height: calc(100vh - 130px);
+    }
+    @media (max-width: 1000px) {
+      .main {
+        padding: 1rem;
+      }
+      .mainWrapper {
+        margin-top: 0rem;
+      }
+    }
+
+    body:has(.nested-dropdowns li:hover) .main {
+      filter: brightness(0.5);
+      transition: all 0.7s ease;
+    }
+  </style>
+</html>

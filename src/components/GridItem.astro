@@ -1,0 +1,36 @@
+---
+interface Props {
+  xs?: string;
+  sm?: string;
+  md?: string;
+  lg?: string;
+  xl?: string;
+}
+
+const { xs = "12", sm = "6", md, lg, xl } = Astro.props;
+
+function parseSafeInt(value: string) {
+  const parsed = parseInt(value, 10);
+  if (isNaN(parsed)) {
+    return 0;
+  }
+  return parsed;
+}
+
+const classes = { sm: xs, md: sm, lg: md, xl: lg, "2xl": xl };
+let classNames = Object.entries(classes)
+  .map(([key, value]) => {
+    const parsed = parseSafeInt(value);
+    if (parsed === 0) {
+      return "";
+    }
+    const prefix = key === "sm" ? "" : `${key}:`;
+
+    return `${prefix}col-span-${parsed}`;
+  })
+  .join(" ");
+---
+
+<div class={"row-auto col-end-auto " + classNames}>
+  <slot />
+</div>
