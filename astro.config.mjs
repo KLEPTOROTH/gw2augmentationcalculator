@@ -16,13 +16,8 @@ export default defineConfig({
     }),
     react(),
   ],
-  // Add this to disable image optimization
-  image: {
-    service: 'passthrough',
-  },
+  // The 'image' block has been removed to avoid build errors.
   vite: {
-    server: {
-      allowedHosts: ['augmentations.arcsolutions.tech'],
     },
     resolve: {
       // Use the array format for more explicit path matching
