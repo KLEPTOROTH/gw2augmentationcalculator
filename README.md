@@ -1,5 +1,5 @@
 Guild Wars 2 Augmentation Calculator
-A web application to help Guild Wars 2 players calculate the material and gold cost for Mighty, Abyssal, and Mists Attunement Fractal Augmentations.
+A web application to help Guild Wars 2 players calculate the material cost for Mists Attunements.
 
 Table of Contents
 About The Project
@@ -19,7 +19,7 @@ Built With
 Acknowledgements
 
 About The Project
-This project provides a simple, clean interface for calculating the total resources needed to purchase Mighty, Abyssal, and Mists Attunement Augmentations in Guild Wars 2. It helps players plan their fractal relic and gold spending efficiently.
+This project provides a simple, clean interface for calculating the total resources needed to purchase Mists Attunement Augmentations in Guild Wars 2. It helps players plan their fractal relic spending efficiently.
 
 Getting Started
 To get a local copy up and running, follow these simple steps.
