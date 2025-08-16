@@ -16,7 +16,12 @@ export default defineConfig({
     }),
     react(),
   ],
-  // No image block, Astro will fall back to its default behavior.
+  // Add this block to explicitly configure Astro's image service.
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/noop',
+    },
+  },
   vite: {
     server: {
       allowedHosts: ['augmentations.arcsolutions.tech'],
