@@ -1,31 +1,14 @@
 ---
-interface Props {
-  disablePadding?: boolean;
-}
-
-const { disablePadding } = Astro.props;
+// This is the original Footer.astro file, modified to only show a credit link.
 ---
 
-<footer class:list={["embossed", { "mt-10": !disablePadding }]}>
-  <div class="footer p-10 embossed text-neutral-content main">
-    <div>
-      <span class="footer-title">Discretize</span>
-      <a class="link link-hover" href="/">About us</a>
-      <a class="link link-hover" href="/apply">Apply</a>
-      <a class="link link-hover" href="https://www.patreon.com/discretize"
-        >Patreon</a
-      >
-    </div>
-    <div>
-      <span class="footer-title">Contribute</span>
-      <a class="link link-hover" href="/cms">CMS</a>
-      <a class="link link-hover" href="/docs/guide">Contribution Guide</a>
-      <a class="link link-hover" href="/docs">Component Documentation</a>
-    </div>
-    <div>
-      <span class="footer-title">Legal</span>
-      <a class="link link-hover" href="/legal">Legal Notice</a>
-      <a class="link link-hover" href="/legal">Privacy policy</a>
-    </div>
+<footer class="footer footer-center p-4 bg-base-300 text-base-content">
+  <div>
+    <p>
+      Based on the <a href="https://next.discretize.eu/augmentations" target="_blank" rel="noopener noreferrer" class="link link-primary">
+        original Fractal Augmentation calculator
+      </a> by Discretize.
+    </p>
   </div>
 </footer>
+

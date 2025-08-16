@@ -1,48 +1,24 @@
 ---
-import { Icon } from "astro-icon/components";
-import Discretize from "../../icons/discretize.astro";
-import Link from "../Link.astro";
+// This is the original TopBar.astro file, modified to remove branding and navigation.
 import DarkModeSwitch from "./DarkModeSwitch.astro";
-import NavBarDesktop from "./NavBarDesktop.astro";
-import NavBarMobile from "./NavBarMobile.astro";
 ---
 
 <header>
   <div class="topArea bg-sky-50 dark:bg-zinc-900">
-    <div class="topButtonArea flex items-center justify-between">
-      <Link href="/" label="Home">
-        <Discretize className="h-12" animate={false} />
-      </Link>
-
-      <div class="max-md:hidden mr-4">
+    <div class="topButtonArea flex items-center justify-end">
+      <!-- The Discretize logo link and mobile nav button have been removed. -->
+      <!-- We are keeping only the DarkModeSwitch. -->
+      <div class="mr-4">
         <DarkModeSwitch />
       </div>
-      <button
-        id="toggleMobileNav"
-        class="rounded md:hidden hamburgerButton"
-        aria-label="Toggle Menu"
-      >
-        <Icon name="mdi:menu" size={32} />
-      </button>
     </div>
   </div>
 
-  <NavBarMobile />
-  <NavBarDesktop />
+  <!-- The NavBarMobile and NavBarDesktop components have been removed. -->
 </header>
 
 <style>
-  header {
-    display: unset;
-  }
-  :global(.discretizeNavButton) {
-    font-weight: 700;
-    font-size: 1.3rem;
-    font-family: Raleway;
-  }
-  :global(.discretizeNavButton:hover) {
-    color: #00cccc;
-  }
+  /* Global styles for nav buttons are no longer needed. */
 
   .topButtonArea {
     max-height: 4rem;
@@ -56,3 +32,4 @@ import NavBarMobile from "./NavBarMobile.astro";
     }
   }
 </style>
+
