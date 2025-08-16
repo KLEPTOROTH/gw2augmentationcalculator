@@ -1,0 +1,14 @@
+# This is the configuration file for Cloudflare Wrangler.
+
+# The name of your Cloudflare Worker.
+# Replace "your-project-name" with the actual name from your Cloudflare dashboard.
+name = "gw2fractalaugmentationcalculator"
+
+# The date for API compatibility.
+compatibility_date = "2025-08-16"
+
+# Specifies that this is a static assets deployment.
+# It tells Wrangler to look for the built files in the "dist" directory.
+[site]
+bucket = "./dist"
+
