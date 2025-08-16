@@ -1,4 +1,3 @@
-// astro.config.mjs
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
 import tailwind from '@astrojs/tailwind';
@@ -16,10 +15,10 @@ export default defineConfig({
     }),
     react(),
   ],
-  // Add this block to explicitly configure Astro's image service.
+  // Correctly configure the image service using its entrypoint.
   image: {
     service: {
-      entrypoint: 'astro/assets/services/noop',
+      entrypoint: 'astro/assets/services/squoosh',
     },
   },
   vite: {
@@ -40,3 +39,4 @@ export default defineConfig({
     },
   },
 });
+
